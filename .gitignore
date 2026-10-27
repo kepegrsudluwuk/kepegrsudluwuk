@@ -1,6 +1,7 @@
 gas/
 .clasp.json
 google auth credential/
+clienid simsurat.json
 TEMPLATE SURAT/
 akun-akun.txt
 ~$*
