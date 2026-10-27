@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123c3b">
+  <title>SIM Surat — RSUD Luwuk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pine: #123c3b;
+      --pine-deep: #0c302f;
+      --pine-soft: #e8f0ed;
+      --teal: #2d7770;
+      --ink: #202d2a;
+      --muted: #71807b;
+      --line: #e2e9e5;
+      --paper: #f5f7f5;
+      --white: #fff;
+      --gold: #e9bd5b;
+      --gold-soft: #fff4d8;
+      --blue: #466d9b;
+      --blue-soft: #edf3fb;
+      --red: #a64f47;
+      --red-soft: #fbefed;
+      --shadow: 0 18px 50px rgba(17, 48, 45, .15);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font: 14px/1.5 'DM Sans', sans-serif; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 248px minmax(0, 1fr); }
+    .sidebar { background: var(--pine); color: #dbe7e2; display: flex; flex-direction: column; padding: 26px 16px 20px; min-height: 100vh; }
+    .brand { display: flex; align-items: center; gap: 12px; padding: 0 10px 30px; }
+    .brand-mark { width: 42px; height: 42px; display: grid; place-items: center; background: var(--gold); color: var(--pine-deep); border-radius: 13px 13px 13px 4px; }
+    .brand-mark svg { width: 25px; height: 25px; }
+    .brand-name { font-weight: 700; color: #fff; font-size: 15px; letter-spacing: -.02em; }
+    .brand-sub { color: #a9c3bb; font-size: 11px; margin-top: 1px; }
+    .nav-label { color: #86a69d; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 0 12px 9px; }
+    .nav { display: grid; gap: 5px; }
+    .nav button { position: relative; display: flex; align-items: center; gap: 12px; width: 100%; padding: 11px 12px; border: 0; background: transparent; color: #bdd0c9; border-radius: 8px; text-align: left; font-weight: 500; }
+    .nav button:hover { background: rgba(255,255,255,.07); color: #fff; }
+    .nav button.active { background: #255452; color: #fff; }
+    .nav button.active::before { content: ''; position: absolute; left: -16px; top: 9px; bottom: 9px; width: 3px; border-radius: 0 3px 3px 0; background: var(--gold); }
+    .nav svg { width: 18px; height: 18px; opacity: .88; flex: 0 0 auto; }
+    .nav-count { margin-left: auto; min-width: 21px; padding: 1px 6px; border-radius: 99px; text-align: center; color: #183e3b; background: var(--gold); font-size: 11px; font-weight: 700; }
+    .sidebar-bottom { margin-top: auto; }
+    .help-card { margin: 20px 4px; padding: 15px 14px; border: 1px solid rgba(210,231,222,.18); border-radius: 10px; background: rgba(255,255,255,.045); }
+    .help-card strong { display: block; color: #fff; font-size: 12px; margin-bottom: 4px; }
+    .help-card p { color: #a9c3bb; font-size: 11px; margin: 0 0 10px; }
+    .help-card button { color: var(--gold); padding: 0; background: none; border: 0; font-size: 11px; font-weight: 700; }
+    .profile { border-top: 1px solid rgba(210,231,222,.17); padding: 17px 8px 0; display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 34px; height: 34px; display: grid; place-items: center; flex: 0 0 auto; color: var(--pine); background: #d6e5de; border-radius: 50%; font-size: 11px; font-weight: 700; }
+    .profile-name { color: #fff; font-size: 12px; font-weight: 600; }
+    .profile-role { color: #9db7ae; font-size: 10px; }
+    .profile-menu { margin-left: auto; color: #a9c3bb; border: 0; background: none; font-size: 20px; }
+    .main { min-width: 0; }
+    .topbar { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(22px, 4vw, 54px); background: #fff; border-bottom: 1px solid var(--line); }
+    .crumb { color: var(--muted); font-size: 12px; }
+    .crumb strong { color: var(--ink); font-weight: 600; }
+    .top-actions { display: flex; align-items: center; gap: 18px; }
+    .date-chip { color: var(--muted); font-size: 12px; }
+    .icon-button { display: grid; place-items: center; width: 36px; height: 36px; background: transparent; color: #50625c; border: 1px solid var(--line); border-radius: 8px; position: relative; }
+    .icon-button svg { width: 17px; height: 17px; }
+    .notification-dot { position: absolute; width: 7px; height: 7px; border: 1.5px solid #fff; background: #d27b55; border-radius: 50%; top: 7px; right: 7px; }
+    .content { max-width: 1500px; padding: 37px clamp(22px, 4vw, 54px) 54px; margin: 0 auto; }
+    .welcome { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 27px; }
+    .welcome h1 { margin: 0; color: var(--pine-deep); font: 500 clamp(28px, 3vw, 37px)/1.1 'Newsreader', Georgia, serif; letter-spacing: -.035em; }
+    .welcome p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    .primary { display: inline-flex; justify-content: center; align-items: center; gap: 9px; min-height: 42px; padding: 0 16px; border: 0; border-radius: 7px; background: var(--pine); color: #fff; font-size: 12px; font-weight: 700; box-shadow: 0 3px 8px rgba(18,60,59,.13); transition: background .18s, transform .18s; }
+    .primary:hover { background: #205451; transform: translateY(-1px); }
+    .primary svg { width: 16px; height: 16px; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; margin-bottom: 24px; }
+    .stat { min-height: 105px; padding: 17px 18px 14px; background: #fff; border: 1px solid var(--line); border-radius: 9px; position: relative; overflow: hidden; }
+    .stat::after { content: ''; position: absolute; width: 3px; left: 0; top: 15px; bottom: 15px; background: var(--stat-color, var(--teal)); border-radius: 0 4px 4px 0; }
+    .stat-label { color: var(--muted); font-size: 11px; font-weight: 600; }
+    .stat-line { display: flex; align-items: baseline; gap: 9px; margin-top: 8px; }
+    .stat-number { color: var(--pine-deep); font-size: 27px; line-height: 1; font-weight: 700; letter-spacing: -.04em; }
+    .stat-note { color: #84918c; font-size: 10px; }
+    .stat-note b { color: var(--teal); font-weight: 700; }
+    .work-area { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 19px; align-items: start; }
+    .panel { background: #fff; border: 1px solid var(--line); border-radius: 9px; min-width: 0; }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 19px 20px 15px; }
+    .panel-title { color: var(--pine-deep); font-size: 14px; font-weight: 700; margin: 0; }
+    .panel-subtitle { color: #84918c; font-size: 11px; margin: 3px 0 0; }
+    .link-button { background: none; border: 0; padding: 3px; color: var(--teal); font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .table-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 20px 14px; }
+    .tabs { display: flex; align-items: center; gap: 17px; align-self: stretch; }
+    .tab { padding: 7px 0; position: relative; border: 0; background: transparent; color: #7d8a85; font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .tab.active { color: var(--pine); }
+    .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--teal); border-radius: 2px; }
+    .search { display: flex; align-items: center; gap: 7px; width: 180px; height: 33px; padding: 0 9px; border: 1px solid var(--line); border-radius: 6px; color: #87938e; }
+    .search svg { width: 14px; height: 14px; flex: 0 0 auto; }
+    .search input { min-width: 0; width: 100%; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 11px; }
+    .table-wrap { overflow-x: auto; border-top: 1px solid #edf0ee; }
+    table { border-collapse: collapse; width: 100%; text-align: left; white-space: nowrap; }
+    th { padding: 10px 14px; color: #87938e; background: #fbfcfb; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .055em; }
+    th:first-child, td:first-child { padding-left: 20px; }
+    th:last-child, td:last-child { padding-right: 20px; }
+    td { padding: 13px 14px; border-top: 1px solid #eff2f0; color: #4f5e58; font-size: 11px; }
+    tbody tr:hover { background: #fafcfb; }
+    .request-id { display: block; color: var(--pine); font-weight: 700; font-size: 10px; }
+    .request-title { display: block; color: var(--ink); font-size: 11px; font-weight: 600; margin-top: 2px; }
+    .request-person { display: flex; align-items: center; gap: 8px; color: #40514a; font-weight: 600; }
+    .mini-avatar { width: 25px; height: 25px; display: grid; place-items: center; color: #48645c; background: #e8efeb; border-radius: 50%; font-size: 8px; font-weight: 700; }
+    .unit { color: #87938e; font-size: 10px; margin-top: 1px; }
+    .status { display: inline-flex; align-items: center; gap: 6px; border-radius: 4px; padding: 4px 7px; font-size: 9px; font-weight: 700; }
+    .status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .status.review { color: #9a6d19; background: var(--gold-soft); }
+    .status.approved { color: #36745e; background: #e8f4ed; }
+    .status.revision { color: var(--red); background: var(--red-soft); }
+    .status.process { color: var(--blue); background: var(--blue-soft); }
+    .row-menu { border: 0; background: transparent; color: #89958f; font-size: 17px; }
+    .table-foot { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; color: #84918c; font-size: 10px; }
+    .pager { display: flex; gap: 4px; }
+    .pager button { width: 25px; height: 25px; border: 1px solid var(--line); border-radius: 5px; color: #687771; background: #fff; font-size: 10px; }
+    .pager button.current { color: #fff; background: var(--pine); border-color: var(--pine); }
+    .side-stack { display: grid; gap: 16px; }
+    .quick-panel { background: var(--pine); color: #fff; border-radius: 9px; padding: 19px 18px 17px; position: relative; overflow: hidden; }
+    .quick-panel::after { content: ''; position: absolute; right: -28px; top: -48px; width: 126px; height: 126px; border: 1px solid rgba(238,198,102,.27); border-radius: 50%; box-shadow: 0 0 0 15px rgba(238,198,102,.04), 0 0 0 30px rgba(238,198,102,.035); }
+    .quick-kicker { color: #c2d7ce; font-size: 10px; }
+    .quick-panel h2 { position: relative; z-index: 1; max-width: 205px; margin: 7px 0 7px; font: 500 22px/1.12 'Newsreader', Georgia, serif; }
+    .quick-panel p { position: relative; z-index: 1; max-width: 220px; margin: 0 0 16px; color: #bdd0c9; font-size: 10px; line-height: 1.55; }
+    .quick-panel .primary { min-height: 34px; padding: 0 11px; background: var(--gold); color: var(--pine-deep); box-shadow: none; font-size: 10px; }
+    .quick-panel .primary:hover { background: #f2cb71; }
+    .agenda { padding: 18px; }
+    .agenda .panel-head { padding: 0 0 13px; }
+    .agenda-day { color: #8a9691; font-size: 10px; }
+    .agenda-item { display: grid; grid-template-columns: 42px 1fr; gap: 10px; padding: 11px 0; border-top: 1px solid #edf0ee; }
+    .agenda-time { color: var(--teal); font-size: 10px; font-weight: 700; padding-top: 2px; }
+    .agenda-item strong { display: block; color: #42524c; font-size: 10px; font-weight: 700; }
+    .agenda-item span { display: block; color: #84918c; font-size: 9px; margin-top: 2px; }
+    .agenda-mark { display: inline-block; width: 6px; height: 6px; margin-right: 5px; background: var(--gold); border-radius: 50%; }
+    .notice { display: flex; align-items: flex-start; gap: 10px; padding: 13px 14px; background: #fff9e9; border: 1px solid #f1e4bd; border-radius: 8px; }
+    .notice svg { color: #b18934; width: 16px; height: 16px; flex: 0 0 auto; margin-top: 1px; }
+    .notice strong { display: block; color: #6d5726; font-size: 10px; }
+    .notice p { margin: 3px 0 0; color: #8b774b; font-size: 9px; line-height: 1.5; }
+    .mobile-menu { display: none; }
+    .overlay { display: none; position: fixed; inset: 0; z-index: 10; align-items: center; justify-content: center; padding: 20px; background: rgba(10,31,29,.5); }
+    .overlay.open { display: flex; }
+    .dialog { width: min(100%, 520px); max-height: 92vh; overflow: auto; padding: 24px; border-radius: 11px; background: #fff; box-shadow: var(--shadow); }
+    .dialog-head { display: flex; justify-content: space-between; gap: 15px; align-items: flex-start; margin-bottom: 19px; }
+    .dialog h2 { margin: 0; color: var(--pine-deep); font: 500 25px/1.1 'Newsreader', Georgia, serif; }
+    .dialog-head p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+    .close { width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: #60716a; font-size: 19px; line-height: 1; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    .field { display: grid; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: #50615a; font-size: 10px; font-weight: 700; }
+    .field input, .field select { height: 39px; padding: 0 11px; border: 1px solid #dfe7e2; border-radius: 6px; outline: 0; color: #35453f; background: #fff; font-size: 11px; }
+    .field input:focus, .field select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(45,119,112,.11); }
+    .lookup-control { display: flex; gap: 8px; }
+    .lookup-control input { min-width: 0; flex: 1; }
+    .lookup-control button { min-height: 39px; padding: 0 11px; white-space: nowrap; }
+    .employee-results { display: grid; gap: 2px; max-height: 190px; margin-top: 5px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+    .employee-results[hidden], .employee-preview[hidden] { display: none; }
+    .employee-option { display: block; width: 100%; padding: 9px 10px; border: 0; border-bottom: 1px solid #edf0ee; background: #fff; color: var(--ink); text-align: left; }
+    .employee-option:hover { background: #f4f8f5; }
+    .employee-option strong, .employee-option span { display: block; }
+    .employee-option strong { font-size: 11px; }
+    .employee-option span { margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .employee-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; padding: 12px; border: 1px solid var(--line); border-radius: 7px; background: #f8faf8; }
+    .employee-preview span { display: block; color: var(--muted); font-size: 9px; }
+    .employee-preview strong { display: block; margin-top: 2px; color: #40514a; font-size: 10px; }
+    .approve-action { border: 0; border-radius: 5px; padding: 5px 8px; color: #fff; background: var(--pine); font-size: 9px; font-weight: 700; }
+    .doc-link { color: var(--teal); font-size: 10px; font-weight: 700; text-decoration: none; }
+    .form-note { margin: 14px 0 18px; padding: 10px 11px; border-radius: 6px; background: #f4f8f5; color: #71807b; font-size: 10px; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; }
+    .secondary { min-height: 38px; padding: 0 13px; border: 1px solid var(--line); border-radius: 6px; background: #fff; color: #53645d; font-size: 11px; font-weight: 600; }
+    .toast { position: fixed; z-index: 20; bottom: 24px; left: 50%; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; padding: 11px 16px; background: var(--pine-deep); color: #fff; border-radius: 7px; box-shadow: var(--shadow); font-size: 11px; transition: .22s ease; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    :focus-visible { outline: 3px solid #d6a839; outline-offset: 2px; }
+    @media (max-width: 1120px) { .work-area { grid-template-columns: minmax(0, 1fr) 245px; gap: 14px; } .content { padding-left: 28px; padding-right: 28px; } .sidebar { width: 225px; } .app { grid-template-columns: 225px minmax(0, 1fr); } }
+    @media (max-width: 900px) { .app { grid-template-columns: 1fr; } .sidebar { position: fixed; z-index: 8; inset: 0 auto 0 0; width: 248px; transform: translateX(-100%); transition: transform .2s ease; box-shadow: var(--shadow); } .sidebar.open { transform: translateX(0); } .mobile-menu { display: grid; } .topbar { justify-content: flex-start; gap: 12px; } .top-actions { margin-left: auto; } .work-area { grid-template-columns: 1fr; } .side-stack { grid-template-columns: 1fr 1fr; align-items: start; } .quick-panel { min-height: 180px; } }
+    @media (max-width: 620px) { .content { padding: 26px 15px 35px; } .topbar { height: 60px; padding: 0 15px; } .date-chip { display: none; } .welcome { align-items: flex-start; flex-direction: column; gap: 16px; margin-bottom: 21px; } .welcome h1 { font-size: 31px; } .welcome .primary { width: 100%; } .stats { grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 16px; } .stat { min-height: 91px; padding: 14px 13px; } .stat-number { font-size: 24px; } .stat-note { font-size: 9px; } .panel-head { padding: 16px 14px 13px; } .table-tools { padding: 0 14px 11px; flex-direction: column-reverse; align-items: stretch; } .tabs { gap: 15px; overflow-x: auto; } .search { width: 100%; } .side-stack { grid-template-columns: 1fr; } .quick-panel { min-height: 0; } .table-foot { padding: 11px 14px; } .form-grid { grid-template-columns: 1fr; } .field.full { grid-column: auto; } .dialog { padding: 20px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+    .login-gate { display: none; position: fixed; inset: 0; z-index: 30; align-items: center; justify-content: center; padding: 20px; background: var(--paper); }
+    .login-gate.open { display: flex; }
+    .login-card { width: min(100%, 380px); padding: 28px; border: 1px solid var(--line); border-radius: 12px; background: #fff; text-align: center; box-shadow: var(--shadow); }
+    .login-mark { width: 44px; height: 44px; display: grid; place-items: center; margin: 0 auto 16px; border-radius: 13px 13px 13px 4px; background: var(--gold); color: var(--pine-deep); }
+    .login-mark svg { width: 24px; height: 24px; }
+    .login-card h2 { margin: 0 0 6px; color: var(--pine-deep); font: 500 24px/1.15 'Newsreader', Georgia, serif; }
+    .login-card p { margin: 0 0 18px; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    #googleButton { display: flex; justify-content: center; min-height: 40px; }
+    .login-foot { margin: 16px 0 0; color: #93a09a; font-size: 9px; }
+    .account-chip { display: none; align-items: center; gap: 7px; padding: 5px 9px; border: 1px solid var(--line); border-radius: 99px; color: #50615a; font-size: 10px; background: #fff; }
+    .account-chip.open { display: inline-flex; }
+    .account-chip b { color: var(--pine); font-weight: 700; }
+  </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M3 12h18"/><path d="M5 5h14v14H5z" opacity=".48"/></svg></div>
+        <div><div class="brand-name">SIM Surat</div><div class="brand-sub">RSUD Luwuk · Kepegawaian</div></div>
+      </div>
+      <div class="nav-label">Ruang kerja</div>
+      <nav class="nav">
+        <button class="active" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></svg>Ringkasan</button>
+        <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 3h7l5 5v13H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M14 3v6h6M9 13h6M9 17h6"/></svg>Permohonan surat <span class="nav-count">8</span></button>
+        <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v15H4zM8 3v4M16 3v4M4 10h16"/><path d="m9 15 2 2 4-4"/></svg>Persetujuan</button>
+        <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 4h14v17H5zM8 8h8M8 12h8M8 16h5"/><path d="M8 2v4M16 2v4"/></svg>Arsip surat</button>
+      </nav>
+      <div class="nav-label" style="margin-top:28px">Pengelolaan</div>
+      <nav class="nav">
+        <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20v-1a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v1M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM17 4.5a4 4 0 0 1 0 7.5M20 15a4 4 0 0 1 2 4v1"/></svg>Data pegawai</button>
+        <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 21V5l8-3 8 3v16M8 9h2M14 9h2M8 13h2M14 13h2M10 21v-4h4v4"/></svg>Unit kerja</button>
+        <button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6 7 7M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/><circle cx="12" cy="12" r="4"/></svg>Pengaturan</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><strong>Butuh bantuan?</strong><p>Panduan penggunaan SIM Surat</p><button type="button" id="helpBtn">Buka panduan ↗</button></div>
+        <div class="profile"><div class="avatar">NR</div><div><div class="profile-name">Nur Rahmawati</div><div class="profile-role">Admin Kepegawaian</div></div><button class="profile-menu" aria-label="Menu profil">···</button></div>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="menuBtn" aria-label="Buka navigasi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        <div class="crumb">SIM Surat <span style="color:#bdc7c2"> / </span> <strong>Ringkasan</strong></div>
+        <div class="top-actions"><div class="account-chip" id="accountChip"><span>Masuk sebagai</span><b id="profileEmail"></b></div><div class="date-chip" id="today">Selasa, 27 Oktober 2026</div><button class="icon-button" aria-label="Notifikasi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="notification-dot"></span></button></div>
+      </header>
+      <div class="content">
+        <section class="welcome">
+          <div><h1>Selamat pagi, Nur.</h1><p>Berikut perkembangan layanan surat kepegawaian hari ini.</p></div>
+          <button class="primary open-form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Buat permohonan</button>
+        </section>
+        <section class="stats" aria-label="Ringkasan permohonan">
+          <article class="stat" style="--stat-color:#d5a63e"><div class="stat-label">Perlu ditinjau</div><div class="stat-line"><span class="stat-number" id="reviewCount">08</span><span class="stat-note"><b>3 baru</b> hari ini</span></div></article>
+          <article class="stat" style="--stat-color:#4b8d76"><div class="stat-label">Disetujui bulan ini</div><div class="stat-line"><span class="stat-number">32</span><span class="stat-note"><b>+12%</b> dari bulan lalu</span></div></article>
+          <article class="stat" style="--stat-color:#6483aa"><div class="stat-label">Dalam proses</div><div class="stat-line"><span class="stat-number">14</span><span class="stat-note">di tahap penerbitan</span></div></article>
+          <article class="stat" style="--stat-color:#ad6a60"><div class="stat-label">Rata-rata selesai</div><div class="stat-line"><span class="stat-number">2,4</span><span class="stat-note">hari kerja</span></div></article>
+        </section>
+        <section class="work-area">
+          <div class="panel">
+            <div class="panel-head"><div><h2 class="panel-title">Permohonan terbaru</h2><p class="panel-subtitle">Pantau status surat yang masuk ke unit Anda.</p></div><button class="link-button" id="viewAll">Lihat semua</button></div>
+            <div class="table-tools">
+              <div class="tabs" role="tablist" aria-label="Filter status">
+                <button class="tab active" data-filter="Semua" role="tab" aria-selected="true">Semua</button>
+                <button class="tab" data-filter="Perlu ditinjau" role="tab" aria-selected="false">Perlu ditinjau</button>
+                <button class="tab" data-filter="Dalam proses" role="tab" aria-selected="false">Dalam proses</button>
+                <button class="tab" data-filter="Selesai" role="tab" aria-selected="false">Selesai</button>
+              </div>
+              <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="searchInput" type="search" placeholder="Cari nama atau nomor…" aria-label="Cari permohonan"></label>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>Surat</th><th>Pemohon</th><th>Tanggal masuk</th><th>Status</th><th></th></tr></thead><tbody id="requestRows"></tbody></table></div>
+            <div class="table-foot"><span id="resultCount">Menampilkan 5 dari 24 permohonan</span><div class="pager"><button aria-label="Halaman sebelumnya">‹</button><button class="current">1</button><button>2</button><button>3</button><button aria-label="Halaman berikutnya">›</button></div></div>
+          </div>
+          <aside class="side-stack">
+            <div class="quick-panel"><div class="quick-kicker">Layanan kepegawaian</div><h2>Surat yang dibutuhkan, lebih mudah.</h2><p>Ajukan surat tugas, rekomendasi, mutasi, dan dokumen kepegawaian lainnya dari satu tempat.</p><button class="primary open-form">Mulai permohonan <span aria-hidden="true">↗</span></button></div>
+            <div class="panel agenda">
+              <div class="panel-head"><div><h2 class="panel-title">Agenda hari ini</h2><div class="agenda-day">Selasa, 27 Oktober</div></div><button class="link-button" id="agendaLink">Kalender</button></div>
+              <div class="agenda-item"><div class="agenda-time">09.00</div><div><strong><i class="agenda-mark"></i>Review berkas surat tugas</strong><span>3 permohonan · Ruang Kepegawaian</span></div></div>
+              <div class="agenda-item"><div class="agenda-time">13.30</div><div><strong><i class="agenda-mark" style="background:#6c91b9"></i>Paraf surat rekomendasi</strong><span>2 dokumen · bersama Kabag TU</span></div></div>
+              <div class="agenda-item"><div class="agenda-time">15.00</div><div><strong><i class="agenda-mark" style="background:#72a18c"></i>Distribusi surat selesai</strong><span>5 surat · melalui email dinas</span></div></div>
+            </div>
+            <div class="notice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><div><strong>Pengingat kelengkapan</strong><p>Pastikan dokumen pendukung sudah terunggah sebelum meneruskan permohonan.</p></div></div>
+          </aside>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="overlay" id="formOverlay" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+    <form class="dialog" id="requestForm">
+      <div class="dialog-head"><div><h2 id="formTitle">Permohonan SPMT</h2><p>Surat Pernyataan Melaksanakan Tugas untuk pegawai RSUD Luwuk.</p></div><button class="close" type="button" id="closeForm" aria-label="Tutup">×</button></div>
+      <div class="form-grid">
+        <div class="field full"><label for="employeeSearch">Nama Pegawai</label><div class="lookup-control"><input id="employeeSearch" name="employeeSearch" placeholder="Ketik minimal 3 huruf nama pegawai" autocomplete="off" required><button class="secondary" id="lookupEmployee" type="button">Cari nama</button></div><div class="employee-results" id="employeeResults" role="listbox" aria-label="Hasil pencarian pegawai" hidden></div></div>
+        <div class="field full"><div class="employee-preview" id="employeePreview" hidden><div><span>Pangkat / golongan ruang</span><strong id="employeeRank"></strong></div><div><span>Jabatan sesuai SK ASN</span><strong id="employeePosition"></strong></div><div><span>TMT mulai bertugas</span><strong id="employeeTmt"></strong></div><div><span>Unit kerja</span><strong>RSUD Luwuk</strong></div></div></div>
+      </div>
+      <div class="form-note" id="formNote">Pejabat penandatangan mengikuti master SPMT. Nomor surat dikosongkan; dokumen dibuat setelah persetujuan.</div>
+      <div class="dialog-actions"><button class="secondary" type="button" id="cancelForm">Batal</button><button class="primary" type="submit">Ajukan SPMT</button></div>
+    </form>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="login-gate" id="loginGate" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="login-card">
+      <div class="login-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M3 12h18"/><path d="M5 5h14v14H5z" opacity=".48"/></svg></div>
+      <h2 id="loginTitle">Masuk ke SIM Surat</h2>
+      <p>Gunakan akun Google yang terdaftar agar data kepegawaian hanya dapat diakses oleh yang berhak.</p>
+      <div id="googleButton"></div>
+      <p class="login-foot" id="loginNote">Akses dibatasi untuk pegawai terdaftar dan admin kepegawaian.</p>
+    </div>
+  </div>
+  <script>
+    const API_URL = ''; // URL deployment Apps Script berakhiran /exec.
+    const GOOGLE_CLIENT_ID = ''; // OAuth Client ID tipe Web untuk GitHub Pages.
+    let idToken = '';
+    let signedInEmail = '';
+    const authConfigured = () => Boolean(API_URL && GOOGLE_CLIENT_ID);
+    let requests = [
+      { id:'SR-2026-0248', title:'Surat Tugas', person:'Andi Saputra, S.Kep.', unit:'Keperawatan', initials:'AS', date:'27 Okt 2026', status:'Perlu ditinjau' },
+      { id:'SR-2026-0247', title:'Rekomendasi Tugas Belajar', person:'dr. Maya Putri', unit:'Pelayanan Medis', initials:'MP', date:'27 Okt 2026', status:'Dalam proses' },
+      { id:'SR-2026-0246', title:'Surat Pengalaman Kerja', person:'Fitria Ningsih, A.Md.', unit:'Laboratorium', initials:'FN', date:'26 Okt 2026', status:'Selesai' },
+      { id:'SR-2026-0245', title:'Rekomendasi UKOM', person:'Rizal Akbar, S.Kep.', unit:'IGD', initials:'RA', date:'26 Okt 2026', status:'Perlu ditinjau' },
+      { id:'SR-2026-0244', title:'Surat Mutasi', person:'Siti Rahmawati', unit:'Administrasi Umum', initials:'SR', date:'24 Okt 2026', status:'Perlu revisi' }
+    ];
+    let activeFilter = 'Semua';
+    const rows = document.getElementById('requestRows');
+    const searchInput = document.getElementById('searchInput');
+    let selectedEmployee = null;
+    const statusClass = status => ({'Perlu ditinjau':'review','Menunggu persetujuan':'review','Dalam proses':'process','Selesai':'approved','Disetujui':'approved','Ditolak':'revision','Perlu revisi':'revision'}[status] || 'review');
+    const html = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    async function apiPost(action, payload) {
+      if (!API_URL) throw new Error('Backend belum disambungkan.');
+      if (!idToken) throw new Error('Silakan masuk dengan akun Google.');
+      const response = await fetch(`${API_URL}?action=${encodeURIComponent(action)}`, { method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({ ...payload, token:idToken }) });
+      const result = await response.json();
+      if (!result.success) throw new Error(result.message || 'Permintaan tidak dapat diproses.');
+      return result;
+    }
+    async function loadSpmtRequests() {
+      if (!API_URL) return;
+      const result = await apiPost('listSpmtRequests', {});
+      requests = result.requests.map(item => ({
+        id:item.requestId, requestId:item.requestId, title:'SPMT', person:item.name, unit:'RSUD Luwuk',
+        initials:(item.name || '?').split(/\s+/).slice(0,2).map(part => part[0]).join('').toUpperCase(),
+        date:item.submittedAt, status:item.status, documentUrl:item.documentUrl
+      }));
+      renderRows();
+    }
+    function renderRows() {
+      const query = searchInput.value.trim().toLocaleLowerCase('id');
+      const filtered = requests.filter(item => {
+        const matchesTab = activeFilter === 'Semua' || (activeFilter === 'Selesai' ? ['Selesai','Disetujui'].includes(item.status) : activeFilter === 'Perlu ditinjau' ? ['Perlu ditinjau','Perlu revisi','Menunggu persetujuan'].includes(item.status) : item.status === activeFilter);
+        return matchesTab && `${item.id} ${item.title} ${item.person} ${item.unit}`.toLocaleLowerCase('id').includes(query);
+      });
+      rows.innerHTML = filtered.length ? filtered.map(item => {
+        const pending = ['Perlu ditinjau','Menunggu persetujuan'].includes(item.status);
+        const action = API_URL && pending ? `<button class="approve-action" data-approve="${html(item.requestId || item.id)}">Setujui</button>` : item.documentUrl ? `<a class="doc-link" href="${html(item.documentUrl)}" target="_blank" rel="noopener">Buka surat</a>` : '<span style="color:#9aa59f">—</span>';
+        return `<tr><td><span class="request-id">${html(item.id)}</span><span class="request-title">${html(item.title)}</span></td><td><div class="request-person"><span class="mini-avatar">${html(item.initials)}</span><span>${html(item.person)}<span class="unit">${html(item.unit)}</span></span></div></td><td>${html(item.date)}</td><td><span class="status ${statusClass(item.status)}">${html(item.status)}</span></td><td>${action}</td></tr>`;
+      }).join('') : '<tr><td colspan="5" style="padding:28px 20px;color:#84918c;text-align:center">Tidak ada permohonan yang cocok. Coba ubah kata kunci atau filter.</td></tr>';
+      document.getElementById('resultCount').textContent = `Menampilkan ${filtered.length} permohonan`;
+    }
+    renderRows();
+    searchInput.addEventListener('input', renderRows);
+    document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(item => { item.classList.remove('active'); item.setAttribute('aria-selected', 'false'); });
+      tab.classList.add('active'); tab.setAttribute('aria-selected', 'true'); activeFilter = tab.dataset.filter; renderRows();
+    }));
+    const overlay = document.getElementById('formOverlay');
+    const closeForm = () => { overlay.classList.remove('open'); document.body.style.overflow = ''; };
+    document.querySelectorAll('.open-form').forEach(button => button.addEventListener('click', () => { overlay.classList.add('open'); document.body.style.overflow = 'hidden'; document.getElementById('employeeSearch').focus(); }));
+    document.getElementById('closeForm').addEventListener('click', closeForm);
+    document.getElementById('cancelForm').addEventListener('click', closeForm);
+    overlay.addEventListener('click', event => { if (event.target === overlay) closeForm(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') closeForm(); });
+    let toastTimer;
+    function toast(message) { const element = document.getElementById('toast'); element.textContent = message; element.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => element.classList.remove('show'), 3200); }
+    const employeeSearch = document.getElementById('employeeSearch');
+    const employeeResults = document.getElementById('employeeResults');
+    const employeePreview = document.getElementById('employeePreview');
+    let searchResults = [];
+    if (API_URL) {
+      document.getElementById('formNote').textContent = 'Pilih nama dari master pegawai. Data lain diisi otomatis; nomor surat tetap kosong dan dokumen dibuat setelah persetujuan.';
+    }
+    const loginGate = document.getElementById('loginGate');
+    const loginNote = document.getElementById('loginNote');
+    function decodeJwtEmail(credential) {
+      try {
+        const part = credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+        return String(JSON.parse(atob(part)).email || '').toLowerCase();
+      } catch (error) { return ''; }
+    }
+    function showApp(email) {
+      signedInEmail = email;
+      loginGate.classList.remove('open');
+      document.getElementById('profileEmail').textContent = email;
+      document.getElementById('accountChip').classList.add('open');
+      loadSpmtRequests().catch(error => toast(error.message));
+    }
+    function initLogin() {
+      if (!API_URL && !GOOGLE_CLIENT_ID) return;
+      if (!API_URL || !GOOGLE_CLIENT_ID) {
+        loginGate.classList.add('open');
+        loginNote.textContent = 'Konfigurasi login atau alamat backend belum diisi.';
+        return;
+      }
+      loginGate.classList.add('open');
+      const start = () => {
+        if (!window.google || !google.accounts || !google.accounts.id) { setTimeout(start, 300); return; }
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: response => {
+            idToken = response.credential;
+            const email = decodeJwtEmail(response.credential);
+            showApp(email || 'Akun Google');
+          }
+        });
+        google.accounts.id.renderButton(document.getElementById('googleButton'), { theme:'outline', size:'large', text:'signin_with', shape:'rectangular', width:300 });
+      };
+      start();
+    }
+    initLogin();
+    employeeSearch.addEventListener('input', () => {
+      selectedEmployee = null;
+      employeePreview.hidden = true;
+      employeeResults.hidden = true;
+    });
+    document.getElementById('lookupEmployee').addEventListener('click', async () => {
+      const name = employeeSearch.value.trim();
+      if (name.length < 3) { toast('Ketik minimal 3 huruf nama pegawai.'); employeeSearch.focus(); return; }
+      if (!API_URL) { toast('Pencarian master pegawai aktif setelah backend disambungkan.'); return; }
+      const button = document.getElementById('lookupEmployee'); button.disabled = true; button.textContent = 'Mencari…';
+      try {
+        const result = await apiPost('searchSpmtEmployees', { name });
+        searchResults = result.employees || [];
+        employeeResults.innerHTML = searchResults.length ? searchResults.map((person,index) => `<button type="button" class="employee-option" role="option" data-employee-index="${index}"><strong>${html(person.name)}</strong><span>${html(person.position)} · ${html(person.rank)}</span></button>`).join('') : '<div style="padding:10px;color:#71807b;font-size:10px">Nama tidak ditemukan atau Anda tidak memiliki akses ke data tersebut.</div>';
+        employeeResults.hidden = false;
+      } catch (error) { toast(error.message); }
+      finally { button.disabled = false; button.textContent = 'Cari nama'; }
+    });
+    employeeResults.addEventListener('click', event => {
+      const option = event.target.closest('[data-employee-index]');
+      if (!option) return;
+      selectedEmployee = searchResults[Number(option.dataset.employeeIndex)];
+      if (!selectedEmployee) return;
+      employeeSearch.value = selectedEmployee.name;
+      document.getElementById('employeeRank').textContent = selectedEmployee.rank || '—';
+      document.getElementById('employeePosition').textContent = selectedEmployee.position || '—';
+      document.getElementById('employeeTmt').textContent = selectedEmployee.tmt || '—';
+      employeePreview.hidden = false;
+      employeeResults.hidden = true;
+    });
+    document.getElementById('requestForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const name = employeeSearch.value.trim();
+      if (API_URL) {
+        if (!selectedEmployee || selectedEmployee.name !== name) { toast('Cari dan pilih nama pegawai dari hasil master terlebih dahulu.'); return; }
+        const button = form.querySelector('[type="submit"]'); button.disabled = true; button.textContent = 'Mengirim…';
+        try {
+          await apiPost('submitSpmt', { employeeKey:selectedEmployee.employeeKey });
+          closeForm(); form.reset(); selectedEmployee = null; employeePreview.hidden = true; toast('Permohonan SPMT dikirim untuk persetujuan.');
+          loadSpmtRequests().catch(() => {});
+        } catch (error) { toast(error.message); }
+        finally { button.disabled = false; button.textContent = 'Ajukan SPMT'; }
+        return;
+      }
+      if (!name) { toast('Masukkan nama pegawai untuk pratinjau.'); return; }
+      const initials = name.split(/\s+/).slice(0,2).map(part => part[0]).join('').toUpperCase();
+      requests.unshift({id:`SR-2026-${String(249 + requests.length - 5).padStart(4,'0')}`, title:'SPMT', person:name, unit:'RSUD Luwuk', initials, date:'27 Okt 2026', status:'Menunggu persetujuan'});
+      renderRows(); form.reset(); selectedEmployee = null; employeePreview.hidden = true; employeeResults.hidden = true; closeForm(); toast('Permohonan simulasi tersimpan di pratinjau lokal.');
+    });
+    rows.addEventListener('click', async event => {
+      const button = event.target.closest('[data-approve]');
+      if (!button || !API_URL) return;
+      button.disabled = true; button.textContent = 'Menyetujui…';
+      try { await apiPost('approveSpmt', { requestId:button.dataset.approve }); await loadSpmtRequests(); toast('SPMT disetujui. Dokumen dibuat dengan nomor surat kosong.'); }
+      catch (error) { toast(error.message); button.disabled = false; button.textContent = 'Setujui'; }
+    });
+    document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+    document.getElementById('viewAll').addEventListener('click', () => { activeFilter='Semua'; document.querySelectorAll('.tab').forEach(tab => {const selected=tab.dataset.filter==='Semua';tab.classList.toggle('active',selected);tab.setAttribute('aria-selected',String(selected));}); searchInput.value=''; renderRows(); toast('Seluruh permohonan ditampilkan.'); });
+    document.getElementById('helpBtn').addEventListener('click', () => toast('Panduan penggunaan akan tersedia setelah sistem terhubung.'));
+    document.getElementById('agendaLink').addEventListener('click', () => toast('Kalender agenda akan tersedia pada pengembangan berikutnya.'));
+  </script>
+</body>
+</html>
